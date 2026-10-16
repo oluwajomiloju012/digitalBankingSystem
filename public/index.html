@@ -13,81 +13,111 @@
   --danger:#E2685A; --ok:#3ECF8E;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;
-  padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);min-height:100vh}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;min-height:100vh;
+  padding-top:env(safe-area-inset-top,0)}
 .mono{font-family:'IBM Plex Mono',monospace}
 button{font-family:inherit;cursor:pointer}
-input{font-family:inherit}
+input,select{font-family:inherit}
 ::selection{background:var(--accent-dim)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 
-/* ---- auth ---- */
-#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px 32px;width:100%;max-width:380px}
-.mark{display:flex;align-items:center;gap:10px;margin-bottom:28px}
-.mark .sq{width:30px;height:30px;border-radius:8px;background:var(--accent);flex-shrink:0}
-.mark span{font-weight:800;font-size:17px;letter-spacing:.2px}
-h1.auth-title{font-size:20px;margin:0 0 6px}
-.auth-sub{color:var(--muted);font-size:13px;margin:0 0 24px}
+/* ---------- auth ---------- */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px 16px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:34px 30px;width:100%;max-width:400px}
+.mark{display:flex;align-items:center;gap:10px}
+.mark .sq{width:28px;height:28px;border-radius:8px;background:var(--accent);flex-shrink:0}
+.mark span{font-weight:800;font-size:16px}
+.auth-title{font-size:20px;margin:26px 0 6px}
+.auth-sub{color:var(--muted);font-size:13px;margin:0 0 22px}
 .field{margin-bottom:14px}
 .field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
 .field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);
   padding:11px 12px;border-radius:9px;font-size:14px}
-.field input:focus,.field select:focus,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
-.row2{display:flex;gap:12px}.row2 .field{flex:1}
-.btn{width:100%;background:var(--accent);color:#1A1508;border:none;padding:12px;border-radius:9px;
-  font-weight:700;font-size:14px;margin-top:6px}
+.row2{display:flex;gap:12px}.row2 .field{flex:1;min-width:0}
+.btn{width:100%;background:var(--accent);color:#1A1508;border:none;padding:12px;border-radius:9px;font-weight:700;font-size:14px;margin-top:6px}
 .btn:hover{filter:brightness(1.06)}
-.btn:disabled{opacity:.5}
+.btn:disabled{opacity:.45;cursor:not-allowed}
 .btn.ghost{background:none;border:1px solid var(--border);color:var(--text);font-weight:600}
+.btn.small{width:auto;padding:8px 14px;font-size:12.5px;margin-top:0}
 .switch{text-align:center;margin-top:18px;font-size:13px;color:var(--muted)}
-.switch a{color:var(--accent);cursor:pointer;font-weight:600}
-.err-msg{background:rgba(226,104,90,.1);border:1px solid rgba(226,104,90,.35);color:var(--danger);
-  padding:9px 12px;border-radius:8px;font-size:12.5px;margin-bottom:14px}
+.switch a{color:var(--accent);cursor:pointer;font-weight:700}
+.err-msg{background:rgba(226,104,90,.1);border:1px solid rgba(226,104,90,.35);color:var(--danger);padding:9px 12px;border-radius:8px;font-size:12.5px;margin-bottom:14px}
+.ok-msg{background:rgba(62,207,142,.08);border:1px solid rgba(62,207,142,.3);color:var(--ok);padding:9px 12px;border-radius:8px;font-size:12.5px;margin-bottom:14px}
 
-/* ---- app ---- */
+/* ---------- app shell ---------- */
 #app{display:none;min-height:100vh}
-nav{display:flex;align-items:center;gap:16px;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel)}
-nav .mark span{font-size:15px}
-.tabs{display:flex;gap:4px;margin-left:24px}
+nav.top{display:flex;align-items:center;gap:14px;padding:13px 24px;border-bottom:1px solid var(--border);background:var(--panel);position:sticky;top:0;z-index:20}
+.tabs{display:flex;gap:4px;margin-left:22px}
 .tab{background:none;border:none;color:var(--muted);padding:8px 14px;border-radius:8px;font-size:13.5px;font-weight:600}
 .tab.active{background:var(--panel2);color:var(--text)}
 .tab:hover{color:var(--text)}
 .spacer{flex:1}
+.who{font-size:12.5px;color:var(--muted)}
 .logout{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 13px;border-radius:8px;font-size:12.5px}
 .logout:hover{color:var(--text)}
-main{max-width:760px;margin:0 auto;padding:32px 24px}
-.view{display:none}
-.view.active{display:block}
+main{max-width:780px;margin:0 auto;padding:30px 24px 90px}
+h2.page{font-size:21px;margin:0 0 4px}
+p.page-sub{color:var(--muted);font-size:13.5px;margin:0 0 22px}
 
-.balance-card{background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--border);
-  border-radius:18px;padding:26px 28px;margin-bottom:22px}
-.balance-label{color:var(--muted);font-size:12.5px;margin-bottom:8px}
-.balance-num{font-size:36px;font-weight:800;letter-spacing:-.5px}
-.acct-line{color:var(--muted);font-size:13px;margin-top:10px}
-.acct-line .mono{color:var(--text)}
-.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;margin-left:8px}
-.pill.verified{background:rgba(62,207,142,.15);color:var(--ok)}
-.pill.pending{background:rgba(201,162,75,.15);color:var(--accent)}
+/* ---------- hero / balance ---------- */
+.hero{background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--border);border-radius:18px;padding:24px 26px;margin-bottom:20px}
+.label{color:var(--muted);font-size:12px}
+.hero-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.balance{font-size:34px;font-weight:800;letter-spacing:-.5px;margin:2px 0 20px}
+.acct-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding-top:16px;border-top:1px solid var(--border)}
+.acct{font-size:19px;font-weight:600;letter-spacing:1.5px;margin-top:3px}
+.acct-meta{color:var(--muted);font-size:12.5px;margin-top:10px}
+.chip-btn{background:var(--bg);border:1px solid var(--border);color:var(--text);padding:7px 13px;border-radius:8px;font-size:12px;font-weight:600}
+.chip-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-.section-title{font-size:14px;font-weight:700;margin:26px 0 12px;color:var(--muted);letter-spacing:.2px}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.action-card{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:16px;text-align:left}
-.action-card b{display:block;font-size:14px;margin-bottom:3px}
-.action-card span{color:var(--muted);font-size:12px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:8px}
+.action{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:15px;text-align:left;color:var(--text)}
+.action:hover{border-color:var(--accent)}
+.action b{display:block;font-size:14px;margin-bottom:3px}
+.action span{color:var(--muted);font-size:12px}
+.section-title{font-size:13px;font-weight:700;margin:26px 0 10px;color:var(--muted)}
 
-.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:420px}
-.recipient-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:14px 0;
-  display:none;align-items:center;gap:10px}
-.recipient-box.show{display:flex}
-.avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-dim);color:var(--accent);
-  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
-.recipient-box b{font-size:13.5px}
-.recipient-box span{display:block;color:var(--muted);font-size:11.5px}
+/* ---------- panels ---------- */
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px}
+.panel.narrow{max-width:440px}
+.kv{display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);font-size:13.5px}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--muted);flex-shrink:0}
+.kv .v{text-align:right;word-break:break-word;font-weight:600}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
+.pill.ok{background:rgba(62,207,142,.15);color:var(--ok)}
+.pill.wait{background:rgba(201,162,75,.15);color:var(--accent)}
 
-.tx-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
-.tx-row:last-child{border-bottom:none}
-.tx-dir{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:15px;flex-shrink:0}
+/* ---------- onboarding steps ---------- */
+.steps{display:flex;flex-direction:column;gap:12px}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:18px}
+.step.current{border-color:var(--accent)}
+.step.locked{opacity:.5}
+.dot{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;color:var(--muted)}
+.step.done .dot{background:var(--ok);border-color:var(--ok);color:#06210F}
+.step.current .dot{border-color:var(--accent);color:var(--accent)}
+.step b{display:block;font-size:14.5px;margin-bottom:3px}
+.step span.d{color:var(--muted);font-size:12.5px;display:block;margin-bottom:10px}
+.step .btn{margin-top:0}
+
+/* ---------- transfer ---------- */
+.recipient{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:0 0 14px;display:none;align-items:center;gap:12px}
+.recipient.show{display:flex}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--accent-dim);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0}
+.recipient b{font-size:14px;display:block}
+.recipient span{color:var(--muted);font-size:12px}
+.hint{color:var(--muted);font-size:12px;margin:-6px 0 14px}
+.receipt{text-align:center}
+.receipt .tick{width:54px;height:54px;border-radius:50%;background:rgba(62,207,142,.15);color:var(--ok);display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 14px}
+.receipt .amt{font-size:28px;font-weight:800;margin:4px 0 18px}
+.receipt .kv{text-align:left}
+
+/* ---------- transactions ---------- */
+.tx{border-bottom:1px solid var(--border)}
+.tx:last-child{border-bottom:none}
+.tx-row{display:flex;align-items:center;gap:12px;padding:13px 0;width:100%;background:none;border:none;color:var(--text);text-align:left}
+.tx-dir{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
 .tx-dir.in{background:rgba(62,207,142,.12);color:var(--ok)}
 .tx-dir.out{background:rgba(226,104,90,.12);color:var(--danger)}
 .tx-mid{flex:1;min-width:0}
@@ -95,293 +125,469 @@ main{max-width:760px;margin:0 auto;padding:32px 24px}
 .tx-mid span{color:var(--muted);font-size:11.5px}
 .tx-amt{font-weight:700;font-size:13.5px}
 .tx-amt.in{color:var(--ok)}
-.tx-amt.out{color:var(--text)}
-.empty{color:var(--muted);font-size:13px;padding:20px 0;text-align:center}
+.tx-detail{display:none;padding:2px 0 16px 46px}
+.tx.open .tx-detail{display:block}
+.tx-detail .kv{padding:8px 0;font-size:12.5px}
+.empty{color:var(--muted);font-size:13px;padding:22px 0;text-align:center}
 
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel2);
-  border:1px solid var(--border);padding:11px 20px;border-radius:9px;font-size:13px;opacity:0;pointer-events:none;
-  transition:opacity .25s;z-index:50;max-width:90vw}
+/* ---------- modal ---------- */
+.overlay{position:fixed;inset:0;background:rgba(4,8,16,.7);display:none;align-items:center;justify-content:center;padding:16px;z-index:40}
+.overlay.show{display:flex}
+.modal{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:380px}
+.modal h3{margin:0 0 16px;font-size:17px}
+.modal .row{display:flex;gap:10px;margin-top:16px}
+.modal .row .btn{margin-top:0}
+
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--border);padding:11px 20px;border-radius:9px;font-size:13px;opacity:0;pointer-events:none;transition:opacity .25s;z-index:60;max-width:90vw}
 .toast.show{opacity:1}
 .toast.ok{border-color:rgba(62,207,142,.4);color:var(--ok)}
 .toast.err{border-color:rgba(226,104,90,.4);color:var(--danger)}
+.skeleton{height:150px;border-radius:18px;background:var(--panel);border:1px solid var(--border);margin-bottom:20px}
+@media (prefers-reduced-motion:no-preference){.skeleton{animation:pulse 1.2s ease-in-out infinite}}
+@keyframes pulse{50%{opacity:.5}}
 
-@media(max-width:640px){.tabs{display:none}main{padding:24px 16px}.grid2{grid-template-columns:1fr}}
+@media(max-width:700px){
+  nav.top{padding:12px 16px}
+  .who{display:none}
+  .tabs{position:fixed;bottom:0;left:0;right:0;margin:0;background:var(--panel);border-top:1px solid var(--border);justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom,0));z-index:30}
+  .tab{flex:1;padding:10px 4px;font-size:12.5px}
+  main{padding:22px 16px 100px}
+  .grid3{grid-template-columns:1fr}
+  .balance{font-size:30px}
+  .acct{font-size:17px}
+}
 </style>
 </head>
 <body>
 
-<div id="auth">
-  <div class="card">
-    <div class="mark"><div class="sq"></div><span>BAN Bank</span></div>
-    <div id="authForms"></div>
-  </div>
-</div>
+<div id="auth"><div class="card"><div class="mark"><div class="sq"></div><span>BAN Bank</span></div><div id="authForms"></div></div></div>
 
 <div id="app">
-  <nav>
+  <nav class="top">
     <div class="mark"><div class="sq"></div><span>BAN Bank</span></div>
     <div class="tabs" id="tabs"></div>
     <div class="spacer"></div>
+    <span class="who" id="who"></span>
     <button class="logout" id="logoutBtn">Sign out</button>
   </nav>
-  <main>
-    <div class="view active" id="view-overview"></div>
-    <div class="view" id="view-verify"></div>
-    <div class="view" id="view-transfer"></div>
-    <div class="view" id="view-history"></div>
-  </main>
+  <main id="main"></main>
 </div>
 
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
-const BASE = '';
-const state = { token:null, customer:null, account:null };
+/* When this file is opened directly from your computer, it talks to your Render API.
+   When it is served by your own server (public/index.html), it uses that same server. */
+const API_URL = 'https://digitalbankingsystem-k5z8.onrender.com';
+const BASE = location.protocol === 'file:' ? API_URL : '';
+const BANK_NAME = 'BAN Bank';
 
-function api(path, method='GET', body=null, auth=true){
+const state = { token:null, customer:{}, account:null };
+
+/* ---------- helpers ---------- */
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const naira = n => '₦' + Number(n || 0).toLocaleString('en-NG', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtDate = d => d ? new Date(d).toLocaleString([], {day:'numeric', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'}) : '—';
+const initials = n => (n || '?').split(' ').filter(Boolean).slice(0,2).map(s => s[0].toUpperCase()).join('');
+
+function toast(msg, kind='ok'){
+  const t = $('#toast'); t.textContent = msg; t.className = 'toast show ' + kind;
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2600);
+}
+async function copyText(text){
+  try { await navigator.clipboard.writeText(text); }
+  catch { const i = document.createElement('input'); i.value = text; document.body.appendChild(i); i.select(); document.execCommand('copy'); i.remove(); }
+  toast('Copied ' + text);
+}
+document.addEventListener('click', e => {
+  const c = e.target.closest('[data-copy]'); if(c) copyText(c.dataset.copy);
+});
+
+function saveSession(){
+  try { sessionStorage.setItem('ban_session', JSON.stringify({token:state.token, customer:state.customer})); } catch {}
+}
+function loadSession(){
+  try { const s = JSON.parse(sessionStorage.getItem('ban_session') || 'null'); if(s && s.token){ state.token = s.token; state.customer = s.customer || {}; return true; } } catch {}
+  return false;
+}
+function clearSession(){ try { sessionStorage.removeItem('ban_session'); } catch {} }
+
+async function api(path, method='GET', body=null, auth=true){
   const headers = {'Content-Type':'application/json'};
   if(auth && state.token) headers.Authorization = 'Bearer ' + state.token;
-  return fetch(BASE+path,{method,headers,body:body?JSON.stringify(body):undefined})
-    .then(async r=>{ const j = await r.json().catch(()=>({})); return {ok:r.ok, status:r.status, data:j}; })
-    .catch(e=>({ok:false, status:0, data:{message:'Network error — is the server running with CORS enabled?'}}));
+  try {
+    const r = await fetch(BASE + path, {method, headers, body: body ? JSON.stringify(body) : undefined});
+    const data = await r.json().catch(() => ({}));
+    if(r.status === 401 && auth){ logout('Your session expired. Please sign in again.'); }
+    return {ok:r.ok, status:r.status, data};
+  } catch {
+    return {ok:false, status:0, network:true, data:{message:'Could not reach the server. It may be waking up — wait a few seconds and try again.'}};
+  }
 }
-function toast(msg, kind='ok'){
-  const t=document.getElementById('toast');
-  t.textContent=msg; t.className='toast show '+kind;
-  setTimeout(()=>t.classList.remove('show'),2600);
-}
-function naira(n){ return '₦' + Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2}); }
-function initials(name){ return (name||'?').split(' ').filter(Boolean).slice(0,2).map(s=>s[0].toUpperCase()).join(''); }
 
-/* ---------- AUTH ---------- */
-function renderLogin(){
-  document.getElementById('authForms').innerHTML = `
+/* ---------- auth ---------- */
+function renderLogin(prefillEmail='', notice=''){
+  $('#authForms').innerHTML = `
     <h1 class="auth-title">Welcome back</h1>
     <p class="auth-sub">Sign in to your account</p>
-    <div id="loginErr"></div>
+    ${notice ? `<div class="ok-msg">${esc(notice)}</div>` : ''}
+    <div id="authErr"></div>
     <form id="loginForm">
-      <div class="field"><label>Email</label><input name="email" type="email" required></div>
-      <div class="field"><label>Password</label><input name="password" type="password" required></div>
+      <div class="field"><label for="le">Email</label><input id="le" name="email" type="email" value="${esc(prefillEmail)}" required autocomplete="email"></div>
+      <div class="field"><label for="lp">Password</label><input id="lp" name="password" type="password" required autocomplete="current-password"></div>
       <button class="btn" type="submit">Sign in</button>
     </form>
     <div class="switch">New here? <a id="toRegister">Create an account</a></div>`;
-  document.getElementById('toRegister').onclick = renderRegister;
-  document.getElementById('loginForm').onsubmit = async e=>{
+  $('#toRegister').onclick = renderRegister;
+  $('#loginForm').onsubmit = async e => {
     e.preventDefault();
-    const f = new FormData(e.target);
-    const btn = e.target.querySelector('button'); btn.disabled=true; btn.textContent='Signing in…';
-    const {ok,data} = await api('/api/customers/login','POST',{email:f.get('email'),password:f.get('password')},false);
-    btn.disabled=false; btn.textContent='Sign in';
-    if(ok && data.token){
-      state.token = data.token; state.customer = data.customer;
-      enterApp();
-    } else {
-      document.getElementById('loginErr').innerHTML = `<div class="err-msg">${data.message||'Login failed'}</div>`;
-    }
+    const f = new FormData(e.target), btn = e.target.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Signing in…';
+    const r = await api('/api/customers/login', 'POST', {email:f.get('email'), password:f.get('password')}, false);
+    btn.disabled = false; btn.textContent = 'Sign in';
+    if(r.ok && r.data.token){
+      state.token = r.data.token; state.customer = r.data.customer || {}; state.account = null;
+      saveSession(); enterApp();
+    } else $('#authErr').innerHTML = `<div class="err-msg">${esc(r.data.message || 'Login failed')}</div>`;
   };
 }
 function renderRegister(){
-  document.getElementById('authForms').innerHTML = `
+  $('#authForms').innerHTML = `
     <h1 class="auth-title">Create your account</h1>
     <p class="auth-sub">Takes less than a minute</p>
-    <div id="regErr"></div>
+    <div id="authErr"></div>
     <form id="regForm">
       <div class="row2">
-        <div class="field"><label>First name</label><input name="firstName" required></div>
-        <div class="field"><label>Last name</label><input name="lastName" required></div>
+        <div class="field"><label for="rf">First name</label><input id="rf" name="firstName" required></div>
+        <div class="field"><label for="rl">Last name</label><input id="rl" name="lastName" required></div>
       </div>
-      <div class="field"><label>Email</label><input name="email" type="email" required></div>
-      <div class="field"><label>Password</label><input name="password" type="password" required></div>
+      <div class="field"><label for="re">Email</label><input id="re" name="email" type="email" required autocomplete="email"></div>
+      <div class="field"><label for="rp">Password</label><input id="rp" name="password" type="password" required autocomplete="new-password"></div>
       <div class="row2">
-        <div class="field"><label>Phone</label><input name="phone" required></div>
-        <div class="field"><label>Date of birth</label><input name="dob" type="date" required></div>
+        <div class="field"><label for="rph">Phone</label><input id="rph" name="phone" required></div>
+        <div class="field"><label for="rd">Date of birth</label><input id="rd" name="dob" type="date" required></div>
       </div>
       <button class="btn" type="submit">Create account</button>
     </form>
     <div class="switch">Already have an account? <a id="toLogin">Sign in</a></div>`;
-  document.getElementById('toLogin').onclick = renderLogin;
-  document.getElementById('regForm').onsubmit = async e=>{
+  $('#toLogin').onclick = () => renderLogin();
+  $('#regForm').onsubmit = async e => {
     e.preventDefault();
-    const f = new FormData(e.target);
-    const payload = Object.fromEntries(f.entries());
-    const btn = e.target.querySelector('button'); btn.disabled=true; btn.textContent='Creating…';
-    const {ok,data} = await api('/api/customers/register','POST',payload,false);
-    btn.disabled=false; btn.textContent='Create account';
-    if(ok){ toast('Account created — sign in to continue'); renderLogin(); }
-    else document.getElementById('regErr').innerHTML = `<div class="err-msg">${data.message||'Registration failed'}</div>`;
+    const payload = Object.fromEntries(new FormData(e.target).entries());
+    const btn = e.target.querySelector('button'); btn.disabled = true; btn.textContent = 'Creating…';
+    const r = await api('/api/customers/register', 'POST', payload, false);
+    btn.disabled = false; btn.textContent = 'Create account';
+    if(r.ok) renderLogin(payload.email, 'Account created. Sign in to continue.');
+    else $('#authErr').innerHTML = `<div class="err-msg">${esc(r.data.message || 'Registration failed')}</div>`;
+  };
+}
+function logout(msg){
+  state.token = null; state.customer = {}; state.account = null; clearSession();
+  $('#app').style.display = 'none'; $('#auth').style.display = 'flex';
+  closeModal(); renderLogin('', msg || '');
+}
+$('#logoutBtn').onclick = () => logout();
+
+/* ---------- data loaders ---------- */
+async function loadAccount(){
+  const r = await api('/api/accounts/balance');
+  if(r.ok){ state.account = r.data; return {ok:true}; }
+  if(r.status === 404){ state.account = null; return {ok:true}; }
+  return {ok:false, message:r.data.message, network:r.network};
+}
+async function loadProfile(){
+  const r = await api('/api/customers/me');
+  if(r.ok){
+    const c = r.data.customer || r.data;
+    state.customer = {...state.customer, ...c}; saveSession();
+  }
+}
+const customerName = () => {
+  const c = state.customer || {};
+  return [c.firstName, c.lastName].filter(Boolean).join(' ') || c.name || c.email || 'Customer';
+};
+const firstName = () => (state.customer && (state.customer.firstName || (state.customer.name || '').split(' ')[0])) || 'there';
+
+/* ---------- shell ---------- */
+const TABS = [['overview','Overview'], ['transfer','Transfer'], ['history','History'], ['account','Account']];
+function enterApp(){
+  $('#auth').style.display = 'none'; $('#app').style.display = 'block';
+  $('#tabs').innerHTML = TABS.map(([id, l]) => `<button class="tab" data-id="${id}">${l}</button>`).join('');
+  $('#tabs').querySelectorAll('.tab').forEach(b => b.onclick = () => showView(b.dataset.id));
+  $('#who').textContent = customerName();
+  showView('overview');
+}
+const VIEWS = {overview:renderOverview, transfer:renderTransfer, history:renderHistory, account:renderAccount, verify:renderVerify};
+function showView(id){
+  document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b.dataset.id === id));
+  window.scrollTo(0, 0);
+  VIEWS[id]();
+}
+const main = () => $('#main');
+function errorBox(msg, retry){
+  main().innerHTML = `<div class="err-msg">${esc(msg)}</div><button class="btn small ghost" id="retryBtn">Try again</button>`;
+  $('#retryBtn').onclick = retry;
+}
+function goButtons(){ main().querySelectorAll('[data-go]').forEach(b => b.onclick = () => showView(b.dataset.go)); }
+
+/* ---------- overview ---------- */
+async function renderOverview(){
+  main().innerHTML = `<div class="skeleton"></div>`;
+  const [acc] = await Promise.all([loadAccount(), loadProfile()]);
+  if(!acc.ok) return errorBox(acc.message || 'Could not load your account.', renderOverview);
+  $('#who').textContent = customerName();
+  const hour = new Date().getHours();
+  const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
+  if(!state.account) return renderOnboarding(greet);
+
+  const a = state.account;
+  main().innerHTML = `
+    <h2 class="page">${greet}, ${esc(firstName())}</h2>
+    <p class="page-sub">Here is where your money stands today.</p>
+    <div class="hero">
+      <div class="hero-top"><span class="label">Available balance</span><button class="chip-btn" id="refreshBal">Refresh</button></div>
+      <div class="balance mono" id="balNum">${naira(a.balance)}</div>
+      <div class="acct-row">
+        <div><div class="label">Account number</div><div class="acct mono">${esc(a.accountNumber)}</div></div>
+        <button class="chip-btn" data-copy="${esc(a.accountNumber)}">Copy</button>
+      </div>
+      <div class="acct-meta">${esc(a.accountName)} · ${BANK_NAME}${a.bankCode ? ' · Bank code ' + esc(a.bankCode) : ''}</div>
+    </div>
+    <div class="grid3">
+      <button class="action" data-go="transfer"><b>Send money</b><span>To any account</span></button>
+      <button class="action" data-go="history"><b>History</b><span>All transactions</span></button>
+      <button class="action" data-go="account"><b>Account details</b><span>Profile and number</span></button>
+    </div>
+    <div class="section-title">Recent activity</div>
+    <div class="panel" id="recent"><div class="empty">Loading…</div></div>`;
+  goButtons();
+  $('#refreshBal').onclick = async () => { await loadAccount(); if(state.account) $('#balNum').textContent = naira(state.account.balance); toast('Balance updated'); };
+  const t = await api('/api/accounts/transactions');
+  const list = (t.ok && t.data.transactions) || [];
+  $('#recent').innerHTML = list.length ? list.slice(0, 4).map(tx => txRow(tx, false)).join('') : `<div class="empty">No transactions yet. Send your first transfer.</div>`;
+}
+
+function renderOnboarding(greet){
+  const verified = !!state.customer.isVerified;
+  main().innerHTML = `
+    <h2 class="page">${greet}, ${esc(firstName())}</h2>
+    <p class="page-sub">Two quick steps and your account is ready to use.</p>
+    <div class="steps">
+      <div class="step done"><div class="dot">✓</div><div><b>Create your profile</b><span class="d">You're signed in as ${esc(state.customer.email || customerName())}.</span></div></div>
+      <div class="step ${verified ? 'done' : 'current'}"><div class="dot">${verified ? '✓' : '2'}</div><div>
+        <b>Verify your identity</b>
+        <span class="d">${verified ? 'Your BVN or NIN has been verified.' : 'Confirm who you are with your BVN or NIN. Required before you can open an account.'}</span>
+        ${verified ? '' : `<button class="btn small" data-go="verify">Verify now</button>`}</div></div>
+      <div class="step ${verified ? 'current' : 'locked'}"><div class="dot">3</div><div>
+        <b>Open your account</b>
+        <span class="d">Your account number is created instantly and pre-funded with ₦15,000.</span>
+        <div id="openErr"></div>
+        <button class="btn small" id="openAcct" ${verified ? '' : 'disabled'}>Open account</button></div></div>
+    </div>`;
+  goButtons();
+  $('#openAcct').onclick = async () => {
+    const b = $('#openAcct'); b.disabled = true; b.textContent = 'Opening…';
+    const r = await api('/api/accounts/create', 'POST');
+    if(r.ok){ toast('Account opened'); state.account = null; showView('account'); }
+    else { b.disabled = false; b.textContent = 'Open account'; $('#openErr').innerHTML = `<div class="err-msg">${esc(r.data.message || 'Could not open account')}${r.data.error ? ' — ' + esc(r.data.error) : ''}</div>`; }
   };
 }
 
-/* ---------- APP SHELL ---------- */
-const TABS = [
-  {id:'overview', label:'Overview'},
-  {id:'verify', label:'Verify identity'},
-  {id:'transfer', label:'Transfer'},
-  {id:'history', label:'History'},
-];
-function renderTabs(){
-  document.getElementById('tabs').innerHTML = TABS.map(t=>
-    `<button class="tab" data-id="${t.id}">${t.label}</button>`).join('');
-  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showView(b.dataset.id));
-}
-function showView(id){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b.dataset.id===id));
-  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id==='view-'+id));
-  if(id==='overview') loadOverview();
-  if(id==='history') loadHistory();
-}
-async function enterApp(){
-  document.getElementById('auth').style.display='none';
-  document.getElementById('app').style.display='block';
-  renderTabs();
-  showView('overview');
-}
-document.getElementById('logoutBtn').onclick = ()=>{
-  state.token=null; state.customer=null; state.account=null;
-  document.getElementById('app').style.display='none';
-  document.getElementById('auth').style.display='flex';
-  renderLogin();
-};
-
-/* ---------- OVERVIEW ---------- */
-async function loadOverview(){
-  const el = document.getElementById('view-overview');
-  el.innerHTML = `<div class="empty">Loading…</div>`;
-  const bal = await api('/api/accounts/balance');
-  if(bal.ok){
-    state.account = bal.data;
-    el.innerHTML = `
-      <div class="balance-card">
-        <div class="balance-label">Available balance</div>
-        <div class="balance-num mono">${naira(bal.data.balance)}</div>
-        <div class="acct-line">${bal.data.accountName} · <span class="mono">${bal.data.accountNumber}</span>
-          <span class="pill verified">Verified</span></div>
-      </div>
-      <div class="section-title">Quick actions</div>
-      <div class="grid2">
-        <button class="action-card" data-go="transfer"><b>Send money</b><span>Transfer to any account</span></button>
-        <button class="action-card" data-go="history"><b>View history</b><span>All your transactions</span></button>
-      </div>`;
-    el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
-  } else {
-    el.innerHTML = `
-      <div class="balance-card">
-        <div class="balance-label">No account yet</div>
-        <div class="balance-num" style="font-size:20px">Get verified, then open your account</div>
-      </div>
-      <div class="section-title">Quick actions</div>
-      <div class="grid2">
-        <button class="action-card" data-go="verify"><b>Verify identity</b><span>BVN or NIN, one minute</span></button>
-        <button class="action-card" id="createAcctBtn"><b>Open account</b><span>Pre-funded with ₦15,000</span></button>
-      </div>`;
-    el.querySelector('[data-go="verify"]').onclick=()=>showView('verify');
-    el.querySelector('#createAcctBtn').onclick = async ()=>{
-      const {ok,data} = await api('/api/accounts/create','POST');
-      if(ok){ toast('Account created'); loadOverview(); }
-      else toast(data.message||'Could not create account — verify identity first','err');
-    };
-  }
-}
-renderView_verify();
-function renderView_verify(){
-  document.getElementById('view-verify').innerHTML = `
-    <div class="section-title">Verify your identity</div>
+/* ---------- account details ---------- */
+async function renderAccount(){
+  main().innerHTML = `<div class="skeleton"></div>`;
+  const [acc] = await Promise.all([loadAccount(), loadProfile()]);
+  if(!acc.ok) return errorBox(acc.message || 'Could not load your details.', renderAccount);
+  const c = state.customer, a = state.account;
+  const verified = !!c.isVerified;
+  const idLine = c.idNumberMasked || (c.bvnOrNin ? '•••••••' + String(c.bvnOrNin).slice(-4) : null);
+  main().innerHTML = `
+    <h2 class="page">Account details</h2>
+    <p class="page-sub">Your account number and personal information.</p>
+    <div class="section-title">Bank account</div>
     <div class="panel">
-      <div id="verifyErr"></div>
+      ${a ? `
+        <div class="kv"><span class="k">Account number</span><span class="v mono">${esc(a.accountNumber)} <button class="chip-btn" data-copy="${esc(a.accountNumber)}" style="margin-left:8px">Copy</button></span></div>
+        <div class="kv"><span class="k">Account name</span><span class="v">${esc(a.accountName)}</span></div>
+        <div class="kv"><span class="k">Bank</span><span class="v">${BANK_NAME}${a.bankCode ? ' (' + esc(a.bankCode) + ')' : ''}</span></div>
+        <div class="kv"><span class="k">Balance</span><span class="v mono">${naira(a.balance)}</span></div>`
+      : `<div class="empty">You don't have an account yet.<br><br><button class="btn small" data-go="overview">${verified ? 'Open your account' : 'Get started'}</button></div>`}
+    </div>
+    <div class="section-title">Personal information</div>
+    <div class="panel">
+      <div class="kv"><span class="k">Name</span><span class="v">${esc(customerName())}</span></div>
+      <div class="kv"><span class="k">Email</span><span class="v">${esc(c.email || '—')}</span></div>
+      <div class="kv"><span class="k">Phone</span><span class="v">${esc(c.phone || '—')}</span></div>
+      <div class="kv"><span class="k">Date of birth</span><span class="v">${esc(c.dob || '—')}</span></div>
+      <div class="kv"><span class="k">Identity</span><span class="v">${verified ? '<span class="pill ok">Verified</span>' : '<span class="pill wait">Not verified</span>'}${c.verificationType ? ' ' + esc(String(c.verificationType).toUpperCase()) : ''}${idLine ? ' · <span class="mono">' + esc(idLine) + '</span>' : ''}</span></div>
+    </div>
+    ${verified ? '' : `<div style="margin-top:16px"><button class="btn small" data-go="verify">Verify identity</button></div>`}`;
+  goButtons();
+}
+
+/* ---------- verify ---------- */
+function renderVerify(){
+  if(state.customer.isVerified){
+    main().innerHTML = `<h2 class="page">Verify your identity</h2><p class="page-sub">You're already verified.</p><button class="btn small" data-go="overview">Back to overview</button>`;
+    return goButtons();
+  }
+  main().innerHTML = `
+    <h2 class="page">Verify your identity</h2>
+    <p class="page-sub">We use your BVN or NIN to confirm it's you. Your name, date of birth and phone come from your profile.</p>
+    <div class="panel narrow">
+      <div id="vErr"></div>
       <form id="verifyForm">
-        <div class="field"><label>ID type</label>
-          <select name="type"><option value="bvn">BVN</option><option value="nin">NIN</option></select></div>
-        <div class="field"><label>ID number</label><input name="idNumber" required></div>
+        <div class="field"><label for="vt">ID type</label><select id="vt" name="type"><option value="bvn">BVN</option><option value="nin">NIN</option></select></div>
+        <div class="field"><label for="vi">ID number</label><input id="vi" name="idNumber" inputmode="numeric" maxlength="11" required></div>
         <button class="btn" type="submit">Verify</button>
       </form>
     </div>`;
-  document.getElementById('verifyForm').onsubmit = async e=>{
+  $('#verifyForm').onsubmit = async e => {
     e.preventDefault();
-    const f = new FormData(e.target);
-    const btn = e.target.querySelector('button'); btn.disabled=true; btn.textContent='Verifying…';
-    const {ok,data} = await api('/api/customers/verify','POST',{type:f.get('type'),idNumber:f.get('idNumber')});
-    btn.disabled=false; btn.textContent='Verify';
-    if(ok){ toast('Identity verified'); showView('overview'); }
-    else document.getElementById('verifyErr').innerHTML = `<div class="err-msg">${data.message||'Verification failed'}</div>`;
+    const f = new FormData(e.target), btn = e.target.querySelector('button');
+    btn.disabled = true; btn.textContent = 'Verifying…';
+    const r = await api('/api/customers/verify', 'POST', {type:f.get('type'), idNumber:f.get('idNumber')});
+    btn.disabled = false; btn.textContent = 'Verify';
+    if(r.ok){
+      state.customer.isVerified = true; state.customer.verificationType = f.get('type'); saveSession();
+      toast('Identity verified. You can now open your account.'); showView('overview');
+    } else $('#vErr').innerHTML = `<div class="err-msg">${esc(r.data.message || 'Verification failed')}${r.data.error ? ' — ' + esc(r.data.error) : ''}</div>`;
   };
 }
 
-/* ---------- TRANSFER ---------- */
-renderView_transfer();
-function renderView_transfer(){
-  document.getElementById('view-transfer').innerHTML = `
-    <div class="section-title">Send money</div>
-    <div class="panel">
-      <div id="transferErr"></div>
-      <div class="field"><label>Recipient account number</label><input id="toAcct" maxlength="10"></div>
-      <div class="recipient-box" id="recipBox">
-        <div class="avatar" id="recipAv"></div>
-        <div><b id="recipName"></b><span id="recipBank"></span></div>
-      </div>
-      <div class="field"><label>Amount</label><input id="amt" type="number" min="1" placeholder="0.00"></div>
-      <button class="btn" id="sendBtn" disabled>Send transfer</button>
-    </div>`;
-  let recipientOk=false;
-  const toAcct=document.getElementById('toAcct'), sendBtn=document.getElementById('sendBtn');
-  let debounce;
-  toAcct.addEventListener('input', ()=>{
-    clearTimeout(debounce); recipientOk=false; sendBtn.disabled=true;
-    document.getElementById('recipBox').classList.remove('show');
-    if(toAcct.value.length<10) return;
-    debounce=setTimeout(async ()=>{
-      const {ok,data} = await api('/api/accounts/name-enquiry/'+toAcct.value);
-      if(ok){
-        document.getElementById('recipAv').textContent = initials(data.accountName);
-        document.getElementById('recipName').textContent = data.accountName;
-        document.getElementById('recipBank').textContent = 'Bank code '+data.bankCode;
-        document.getElementById('recipBox').classList.add('show');
-        recipientOk=true; sendBtn.disabled=false;
-      } else {
-        document.getElementById('transferErr').innerHTML = `<div class="err-msg">${data.message||'Account not found'}</div>`;
-      }
-    },500);
-  });
-  sendBtn.onclick = async ()=>{
-    document.getElementById('transferErr').innerHTML='';
-    const amount = Number(document.getElementById('amt').value);
-    if(!recipientOk || !amount){ toast('Enter a recipient and amount','err'); return; }
-    sendBtn.disabled=true; sendBtn.textContent='Sending…';
-    const {ok,data} = await api('/api/accounts/transfer','POST',{toAccountNumber:toAcct.value, amount});
-    sendBtn.disabled=false; sendBtn.textContent='Send transfer';
-    if(ok){
-      toast('Transfer successful — '+naira(amount)+' sent');
-      toAcct.value=''; document.getElementById('amt').value='';
-      document.getElementById('recipBox').classList.remove('show');
-      recipientOk=false;
-    } else {
-      document.getElementById('transferErr').innerHTML = `<div class="err-msg">${data.message||'Transfer failed'}</div>`;
-    }
-  };
-}
-
-/* ---------- HISTORY ---------- */
-async function loadHistory(){
-  const el = document.getElementById('view-history');
-  el.innerHTML = `<div class="section-title">Transaction history</div><div class="empty">Loading…</div>`;
-  const {ok,data} = await api('/api/accounts/transactions');
-  const myAcct = state.account ? state.account.accountNumber : null;
-  if(ok && data.transactions && data.transactions.length){
-    const rows = data.transactions.map(tx=>{
-      const isOut = tx.senderAccount === myAcct;
-      return `<div class="tx-row">
-        <div class="tx-dir ${isOut?'out':'in'}">${isOut?'↑':'↓'}</div>
-        <div class="tx-mid"><b>${isOut? 'To '+tx.receiverAccount : 'From '+tx.senderAccount}</b>
-          <span>${tx.type} · ${new Date(tx.createdAt).toLocaleString()}</span></div>
-        <div class="tx-amt ${isOut?'out':'in'} mono">${isOut?'-':'+'}${naira(tx.amount)}</div>
-      </div>`;
-    }).join('');
-    el.innerHTML = `<div class="section-title">Transaction history</div><div class="panel" style="max-width:100%">${rows}</div>`;
-  } else {
-    el.innerHTML = `<div class="section-title">Transaction history</div><div class="panel" style="max-width:100%"><div class="empty">No transactions yet</div></div>`;
+/* ---------- transfer ---------- */
+async function renderTransfer(){
+  main().innerHTML = `<div class="skeleton"></div>`;
+  const acc = await loadAccount();
+  if(!acc.ok) return errorBox(acc.message || 'Could not load your account.', renderTransfer);
+  if(!state.account){
+    main().innerHTML = `<h2 class="page">Send money</h2><p class="page-sub">You need an account before you can send money.</p><button class="btn small" data-go="overview">Set up my account</button>`;
+    return goButtons();
   }
+  const a = state.account;
+  let recipient = null;
+  main().innerHTML = `
+    <h2 class="page">Send money</h2>
+    <p class="page-sub">Available: <span class="mono">${naira(a.balance)}</span> from ${esc(a.accountNumber)}</p>
+    <div class="panel narrow" id="tPanel">
+      <div id="tErr"></div>
+      <div class="field"><label for="to">Recipient account number</label><input id="to" inputmode="numeric" maxlength="10" placeholder="10-digit account number"></div>
+      <div class="recipient" id="rcpt"><div class="avatar" id="rAv"></div><div><b id="rName"></b><span id="rBank"></span></div></div>
+      <div class="field"><label for="amt">Amount (₦)</label><input id="amt" type="number" min="1" step="1" placeholder="0"></div>
+      <button class="btn" id="review" disabled>Review transfer</button>
+    </div>`;
+  const to = $('#to'), amt = $('#amt'), review = $('#review');
+  const refresh = () => { review.disabled = !(recipient && Number(amt.value) > 0); };
+  let timer;
+  to.addEventListener('input', () => {
+    clearTimeout(timer); recipient = null; $('#rcpt').classList.remove('show'); $('#tErr').innerHTML = ''; refresh();
+    if(to.value.length < 10) return;
+    timer = setTimeout(async () => {
+      const r = await api('/api/accounts/name-enquiry/' + encodeURIComponent(to.value));
+      if(r.ok){
+        recipient = r.data;
+        $('#rAv').textContent = initials(r.data.accountName); $('#rName').textContent = r.data.accountName;
+        $('#rBank').textContent = r.data.bankCode ? 'Bank code ' + r.data.bankCode : '';
+        $('#rcpt').classList.add('show');
+      } else $('#tErr').innerHTML = `<div class="err-msg">${esc(r.data.message || 'We could not find that account.')}</div>`;
+      refresh();
+    }, 450);
+  });
+  amt.addEventListener('input', refresh);
+  review.onclick = () => {
+    const amount = Number(amt.value);
+    if(recipient.accountNumber === a.accountNumber) return $('#tErr').innerHTML = `<div class="err-msg">You can't send money to your own account.</div>`;
+    if(amount > Number(a.balance)) return $('#tErr').innerHTML = `<div class="err-msg">That is more than your available balance of ${naira(a.balance)}.</div>`;
+    openModal(`
+      <h3>Confirm transfer</h3>
+      <div class="kv"><span class="k">To</span><span class="v">${esc(recipient.accountName)}</span></div>
+      <div class="kv"><span class="k">Account</span><span class="v mono">${esc(recipient.accountNumber || to.value)}</span></div>
+      <div class="kv"><span class="k">Amount</span><span class="v mono">${naira(amount)}</span></div>
+      <div id="mErr"></div>
+      <div class="row"><button class="btn ghost" id="mCancel">Cancel</button><button class="btn" id="mSend">Send ${naira(amount)}</button></div>`);
+    $('#mCancel').onclick = closeModal;
+    $('#mSend').onclick = async () => {
+      const b = $('#mSend'); b.disabled = true; b.textContent = 'Sending…';
+      const r = await api('/api/accounts/transfer', 'POST', {toAccountNumber: to.value, amount});
+      if(r.ok){
+        closeModal();
+        const tx = r.data.transaction || {};
+        state.account.balance = Number(state.account.balance) - amount;
+        showReceipt(tx, recipient, amount);
+      } else { b.disabled = false; b.textContent = 'Send ' + naira(amount); $('#mErr').innerHTML = `<div class="err-msg" style="margin-top:12px">${esc(r.data.message || 'Transfer failed')}${r.data.error ? ' — ' + esc(r.data.error) : ''}</div>`; }
+    };
+  };
+}
+function showReceipt(tx, recipient, amount){
+  main().innerHTML = `
+    <div class="panel narrow receipt">
+      <div class="tick">✓</div>
+      <div class="label">Transfer successful</div>
+      <div class="amt mono">${naira(amount)}</div>
+      <div class="kv"><span class="k">To</span><span class="v">${esc(recipient.accountName)}</span></div>
+      <div class="kv"><span class="k">Account</span><span class="v mono">${esc(tx.receiverAccount || recipient.accountNumber)}</span></div>
+      <div class="kv"><span class="k">Type</span><span class="v">${tx.type === 'inter' ? 'Inter-bank' : 'Intra-bank'}</span></div>
+      <div class="kv"><span class="k">Reference</span><span class="v mono">${esc(tx.reference || '—')} ${tx.reference ? `<button class="chip-btn" data-copy="${esc(tx.reference)}" style="margin-left:6px">Copy</button>` : ''}</span></div>
+      <div class="kv"><span class="k">Date</span><span class="v">${fmtDate(tx.createdAt || new Date())}</span></div>
+      <div class="kv"><span class="k">New balance</span><span class="v mono">${naira(state.account.balance)}</span></div>
+      <div style="display:flex;gap:10px;margin-top:18px"><button class="btn ghost" data-go="transfer">New transfer</button><button class="btn" data-go="history">View history</button></div>
+    </div>`;
+  goButtons();
 }
 
-renderLogin();
+/* ---------- history ---------- */
+function txRow(tx, expandable = true){
+  const mine = state.account && state.account.accountNumber;
+  const out = tx.senderAccount === mine;
+  const detail = expandable ? `
+    <div class="tx-detail">
+      <div class="kv"><span class="k">Reference</span><span class="v mono">${esc(tx.reference)} <button class="chip-btn" data-copy="${esc(tx.reference)}" style="margin-left:6px">Copy</button></span></div>
+      <div class="kv"><span class="k">From</span><span class="v mono">${esc(tx.senderAccount)}</span></div>
+      <div class="kv"><span class="k">To</span><span class="v mono">${esc(tx.receiverAccount)}</span></div>
+      <div class="kv"><span class="k">Type</span><span class="v">${tx.type === 'inter' ? 'Inter-bank' : 'Intra-bank'}</span></div>
+      <div class="kv"><span class="k">Status</span><span class="v"><span class="pill ${tx.status === 'SUCCESS' ? 'ok' : 'wait'}">${esc(tx.status)}</span></span></div>
+      <div class="kv"><span class="k">Date</span><span class="v">${fmtDate(tx.createdAt)}</span></div>
+      <div class="kv"><span class="k">Verify with Nibss</span><span class="v"><button class="chip-btn" data-check="${esc(tx.reference)}">Check status</button> <span class="mono" data-result="${esc(tx.reference)}"></span></span></div>
+    </div>` : '';
+  return `<div class="tx">
+    <button class="tx-row" ${expandable ? 'data-toggle' : 'tabindex="-1" style="cursor:default"'}>
+      <div class="tx-dir ${out ? 'out' : 'in'}">${out ? '↑' : '↓'}</div>
+      <div class="tx-mid"><b>${out ? 'To ' : 'From '}${esc(out ? tx.receiverAccount : tx.senderAccount)}</b><span>${tx.type === 'inter' ? 'Inter-bank' : 'Intra-bank'} · ${fmtDate(tx.createdAt)}</span></div>
+      <div class="tx-amt mono ${out ? '' : 'in'}">${out ? '-' : '+'}${naira(tx.amount)}</div>
+    </button>${detail}</div>`;
+}
+async function renderHistory(){
+  main().innerHTML = `<h2 class="page">Transaction history</h2><p class="page-sub">Tap a transaction to see its details.</p><div class="panel" id="hist"><div class="empty">Loading…</div></div>`;
+  await loadAccount();
+  const r = await api('/api/accounts/transactions');
+  if(!r.ok) return $('#hist').innerHTML = `<div class="err-msg">${esc(r.data.message || 'Could not load transactions.')}</div>`;
+  const list = r.data.transactions || [];
+  $('#hist').innerHTML = list.length ? list.map(tx => txRow(tx)).join('') : `<div class="empty">No transactions yet.</div>`;
+}
+document.addEventListener('click', async e => {
+  const t = e.target.closest('[data-toggle]');
+  if(t && !e.target.closest('[data-copy]')) t.parentElement.classList.toggle('open');
+  const c = e.target.closest('[data-check]');
+  if(c){
+    const ref = c.dataset.check, out = document.querySelector(`[data-result="${CSS.escape(ref)}"]`);
+    c.disabled = true; c.textContent = 'Checking…';
+    const r = await api('/api/accounts/transaction/' + encodeURIComponent(ref));
+    c.disabled = false; c.textContent = 'Check status';
+    out.textContent = r.ok ? (r.data.status || 'Found') : 'Not found';
+  }
+});
+
+/* ---------- modal ---------- */
+function openModal(html){ $('#modal').innerHTML = html; $('#overlay').classList.add('show'); }
+function closeModal(){ $('#overlay').classList.remove('show'); }
+$('#overlay').addEventListener('click', e => { if(e.target.id === 'overlay') closeModal(); });
+document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+/* ---------- start ---------- */
+if(loadSession()) enterApp(); else renderLogin();
 </script>
 </body>
 </html>

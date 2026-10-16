@@ -132,8 +132,18 @@ const verifyCustomer = async (req, res) => {
     }
 };
 
+const getMe = async (req, res) => {
+  const c = req.customer;
+  res.json({ customer: {
+    firstName: c.firstName, lastName: c.lastName, email: c.email,
+    phone: c.phone, dob: c.dob, isVerified: c.isVerified,
+    verificationType: c.verificationType
+  }});
+};
+
 module.exports = {
     loginCustomer,
     registerCustomer,
-    verifyCustomer
+    verifyCustomer,
+    getMe
 };
