@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>BAN Bank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B1220; --panel:#121B2E; --panel2:#17223A; --border:#263457;
+  --text:#EDF1F7; --muted:#8592AD; --accent:#C9A24B; --accent-dim:#3A311C;
+  --danger:#E2685A; --ok:#3ECF8E;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:'Manrope',sans-serif;
+  padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0);min-height:100vh}
+.mono{font-family:'IBM Plex Mono',monospace}
+button{font-family:inherit;cursor:pointer}
+input{font-family:inherit}
+::selection{background:var(--accent-dim)}
+
+/* ---- auth ---- */
+#auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:36px 32px;width:100%;max-width:380px}
+.mark{display:flex;align-items:center;gap:10px;margin-bottom:28px}
+.mark .sq{width:30px;height:30px;border-radius:8px;background:var(--accent);flex-shrink:0}
+.mark span{font-weight:800;font-size:17px;letter-spacing:.2px}
+h1.auth-title{font-size:20px;margin:0 0 6px}
+.auth-sub{color:var(--muted);font-size:13px;margin:0 0 24px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);
+  padding:11px 12px;border-radius:9px;font-size:14px}
+.field input:focus,.field select:focus,.btn:focus-visible,.tab:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.row2{display:flex;gap:12px}.row2 .field{flex:1}
+.btn{width:100%;background:var(--accent);color:#1A1508;border:none;padding:12px;border-radius:9px;
+  font-weight:700;font-size:14px;margin-top:6px}
+.btn:hover{filter:brightness(1.06)}
+.btn:disabled{opacity:.5}
+.btn.ghost{background:none;border:1px solid var(--border);color:var(--text);font-weight:600}
+.switch{text-align:center;margin-top:18px;font-size:13px;color:var(--muted)}
+.switch a{color:var(--accent);cursor:pointer;font-weight:600}
+.err-msg{background:rgba(226,104,90,.1);border:1px solid rgba(226,104,90,.35);color:var(--danger);
+  padding:9px 12px;border-radius:8px;font-size:12.5px;margin-bottom:14px}
+
+/* ---- app ---- */
+#app{display:none;min-height:100vh}
+nav{display:flex;align-items:center;gap:16px;padding:14px 24px;border-bottom:1px solid var(--border);background:var(--panel)}
+nav .mark span{font-size:15px}
+.tabs{display:flex;gap:4px;margin-left:24px}
+.tab{background:none;border:none;color:var(--muted);padding:8px 14px;border-radius:8px;font-size:13.5px;font-weight:600}
+.tab.active{background:var(--panel2);color:var(--text)}
+.tab:hover{color:var(--text)}
+.spacer{flex:1}
+.logout{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 13px;border-radius:8px;font-size:12.5px}
+.logout:hover{color:var(--text)}
+main{max-width:760px;margin:0 auto;padding:32px 24px}
+.view{display:none}
+.view.active{display:block}
+
+.balance-card{background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--border);
+  border-radius:18px;padding:26px 28px;margin-bottom:22px}
+.balance-label{color:var(--muted);font-size:12.5px;margin-bottom:8px}
+.balance-num{font-size:36px;font-weight:800;letter-spacing:-.5px}
+.acct-line{color:var(--muted);font-size:13px;margin-top:10px}
+.acct-line .mono{color:var(--text)}
+.pill{display:inline-block;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;margin-left:8px}
+.pill.verified{background:rgba(62,207,142,.15);color:var(--ok)}
+.pill.pending{background:rgba(201,162,75,.15);color:var(--accent)}
+
+.section-title{font-size:14px;font-weight:700;margin:26px 0 12px;color:var(--muted);letter-spacing:.2px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.action-card{background:var(--panel);border:1px solid var(--border);border-radius:13px;padding:16px;text-align:left}
+.action-card b{display:block;font-size:14px;margin-bottom:3px}
+.action-card span{color:var(--muted);font-size:12px}
+
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px;max-width:420px}
+.recipient-box{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:14px 0;
+  display:none;align-items:center;gap:10px}
+.recipient-box.show{display:flex}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--accent-dim);color:var(--accent);
+  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0}
+.recipient-box b{font-size:13.5px}
+.recipient-box span{display:block;color:var(--muted);font-size:11.5px}
+
+.tx-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--border)}
+.tx-row:last-child{border-bottom:none}
+.tx-dir{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:15px;flex-shrink:0}
+.tx-dir.in{background:rgba(62,207,142,.12);color:var(--ok)}
+.tx-dir.out{background:rgba(226,104,90,.12);color:var(--danger)}
+.tx-mid{flex:1;min-width:0}
+.tx-mid b{font-size:13.5px;display:block}
+.tx-mid span{color:var(--muted);font-size:11.5px}
+.tx-amt{font-weight:700;font-size:13.5px}
+.tx-amt.in{color:var(--ok)}
+.tx-amt.out{color:var(--text)}
+.empty{color:var(--muted);font-size:13px;padding:20px 0;text-align:center}
+
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--panel2);
+  border:1px solid var(--border);padding:11px 20px;border-radius:9px;font-size:13px;opacity:0;pointer-events:none;
+  transition:opacity .25s;z-index:50;max-width:90vw}
+.toast.show{opacity:1}
+.toast.ok{border-color:rgba(62,207,142,.4);color:var(--ok)}
+.toast.err{border-color:rgba(226,104,90,.4);color:var(--danger)}
+
+@media(max-width:640px){.tabs{display:none}main{padding:24px 16px}.grid2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div id="auth">
+  <div class="card">
+    <div class="mark"><div class="sq"></div><span>BAN Bank</span></div>
+    <div id="authForms"></div>
+  </div>
+</div>
+
+<div id="app">
+  <nav>
+    <div class="mark"><div class="sq"></div><span>BAN Bank</span></div>
+    <div class="tabs" id="tabs"></div>
+    <div class="spacer"></div>
+    <button class="logout" id="logoutBtn">Sign out</button>
+  </nav>
+  <main>
+    <div class="view active" id="view-overview"></div>
+    <div class="view" id="view-verify"></div>
+    <div class="view" id="view-transfer"></div>
+    <div class="view" id="view-history"></div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const BASE = 'http://localhost:3000';
+const state = { token:null, customer:null, account:null };
+
+function api(path, method='GET', body=null, auth=true){
+  const headers = {'Content-Type':'application/json'};
+  if(auth && state.token) headers.Authorization = 'Bearer ' + state.token;
+  return fetch(BASE+path,{method,headers,body:body?JSON.stringify(body):undefined})
+    .then(async r=>{ const j = await r.json().catch(()=>({})); return {ok:r.ok, status:r.status, data:j}; })
+    .catch(e=>({ok:false, status:0, data:{message:'Network error — is the server running with CORS enabled?'}}));
+}
+function toast(msg, kind='ok'){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast show '+kind;
+  setTimeout(()=>t.classList.remove('show'),2600);
+}
+function naira(n){ return '₦' + Number(n||0).toLocaleString('en-NG',{minimumFractionDigits:2}); }
+function initials(name){ return (name||'?').split(' ').filter(Boolean).slice(0,2).map(s=>s[0].toUpperCase()).join(''); }
+
+/* ---------- AUTH ---------- */
+function renderLogin(){
+  document.getElementById('authForms').innerHTML = `
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-sub">Sign in to your account</p>
+    <div id="loginErr"></div>
+    <form id="loginForm">
+      <div class="field"><label>Email</label><input name="email" type="email" required></div>
+      <div class="field"><label>Password</label><input name="password" type="password" required></div>
+      <button class="btn" type="submit">Sign in</button>
+    </form>
+    <div class="switch">New here? <a id="toRegister">Create an account</a></div>`;
+  document.getElementById('toRegister').onclick = renderRegister;
+  document.getElementById('loginForm').onsubmit = async e=>{
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const btn = e.target.querySelector('button'); btn.disabled=true; btn.textContent='Signing in…';
+    const {ok,data} = await api('/api/customers/login','POST',{email:f.get('email'),password:f.get('password')},false);
+    btn.disabled=false; btn.textContent='Sign in';
+    if(ok && data.token){
+      state.token = data.token; state.customer = data.customer;
+      enterApp();
+    } else {
+      document.getElementById('loginErr').innerHTML = `<div class="err-msg">${data.message||'Login failed'}</div>`;
+    }
+  };
+}
+function renderRegister(){
+  document.getElementById('authForms').innerHTML = `
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-sub">Takes less than a minute</p>
+    <div id="regErr"></div>
+    <form id="regForm">
+      <div class="row2">
+        <div class="field"><label>First name</label><input name="firstName" required></div>
+        <div class="field"><label>Last name</label><input name="lastName" required></div>
+      </div>
+      <div class="field"><label>Email</label><input name="email" type="email" required></div>
+      <div class="field"><label>Password</label><input name="password" type="password" required></div>
+      <div class="row2">
+        <div class="field"><label>Phone</label><input name="phone" required></div>
+        <div class="field"><label>Date of birth</label><input name="dob" type="date" required></div>
+      </div>
+      <button class="btn" type="submit">Create account</button>
+    </form>
+    <div class="switch">Already have an account? <a id="toLogin">Sign in</a></div>`;
+  document.getElementById('toLogin').onclick = renderLogin;
+  document.getElementById('regForm').onsubmit = async e=>{
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const payload = Object.fromEntries(f.entries());
+    const btn = e.target.querySelector('button'); btn.disabled=true; btn.textContent='Creating…';
+    const {ok,data} = await api('/api/customers/register','POST',payload,false);
+    btn.disabled=false; btn.textContent='Create account';
+    if(ok){ toast('Account created — sign in to continue'); renderLogin(); }
+    else document.getElementById('regErr').innerHTML = `<div class="err-msg">${data.message||'Registration failed'}</div>`;
+  };
+}
+
+/* ---------- APP SHELL ---------- */
+const TABS = [
+  {id:'overview', label:'Overview'},
+  {id:'verify', label:'Verify identity'},
+  {id:'transfer', label:'Transfer'},
+  {id:'history', label:'History'},
+];
+function renderTabs(){
+  document.getElementById('tabs').innerHTML = TABS.map(t=>
+    `<button class="tab" data-id="${t.id}">${t.label}</button>`).join('');
+  document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>showView(b.dataset.id));
+}
+function showView(id){
+  document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active', b.dataset.id===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active', v.id==='view-'+id));
+  if(id==='overview') loadOverview();
+  if(id==='history') loadHistory();
+}
+async function enterApp(){
+  document.getElementById('auth').style.display='none';
+  document.getElementById('app').style.display='block';
+  renderTabs();
+  showView('overview');
+}
+document.getElementById('logoutBtn').onclick = ()=>{
+  state.token=null; state.customer=null; state.account=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('auth').style.display='flex';
+  renderLogin();
+};
+
+/* ---------- OVERVIEW ---------- */
+async function loadOverview(){
+  const el = document.getElementById('view-overview');
+  el.innerHTML = `<div class="empty">Loading…</div>`;
+  const bal = await api('/api/accounts/balance');
+  if(bal.ok){
+    state.account = bal.data;
+    el.innerHTML = `
+      <div class="balance-card">
+        <div class="balance-label">Available balance</div>
+        <div class="balance-num mono">${naira(bal.data.balance)}</div>
+        <div class="acct-line">${bal.data.accountName} · <span class="mono">${bal.data.accountNumber}</span>
+          <span class="pill verified">Verified</span></div>
+      </div>
+      <div class="section-title">Quick actions</div>
+      <div class="grid2">
+        <button class="action-card" data-go="transfer"><b>Send money</b><span>Transfer to any account</span></button>
+        <button class="action-card" data-go="history"><b>View history</b><span>All your transactions</span></button>
+      </div>`;
+    el.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>showView(b.dataset.go));
+  } else {
+    el.innerHTML = `
+      <div class="balance-card">
+        <div class="balance-label">No account yet</div>
+        <div class="balance-num" style="font-size:20px">Get verified, then open your account</div>
+      </div>
+      <div class="section-title">Quick actions</div>
+      <div class="grid2">
+        <button class="action-card" data-go="verify"><b>Verify identity</b><span>BVN or NIN, one minute</span></button>
+        <button class="action-card" id="createAcctBtn"><b>Open account</b><span>Pre-funded with ₦15,000</span></button>
+      </div>`;
+    el.querySelector('[data-go="verify"]').onclick=()=>showView('verify');
+    el.querySelector('#createAcctBtn').onclick = async ()=>{
+      const {ok,data} = await api('/api/accounts/create','POST');
+      if(ok){ toast('Account created'); loadOverview(); }
+      else toast(data.message||'Could not create account — verify identity first','err');
+    };
+  }
+}
+renderView_verify();
+function renderView_verify(){
+  document.getElementById('view-verify').innerHTML = `
+    <div class="section-title">Verify your identity</div>
+    <div class="panel">
+      <div id="verifyErr"></div>
+      <form id="verifyForm">
+        <div class="field"><label>ID type</label>
+          <select name="type"><option value="bvn">BVN</option><option value="nin">NIN</option></select></div>
+        <div class="field"><label>ID number</label><input name="idNumber" required></div>
+        <button class="btn" type="submit">Verify</button>
+      </form>
+    </div>`;
+  document.getElementById('verifyForm').onsubmit = async e=>{
+    e.preventDefault();
+    const f = new FormData(e.target);
+    const btn = e.target.querySelector('button'); btn.disabled=true; btn.textContent='Verifying…';
+    const {ok,data} = await api('/api/customers/verify','POST',{type:f.get('type'),idNumber:f.get('idNumber')});
+    btn.disabled=false; btn.textContent='Verify';
+    if(ok){ toast('Identity verified'); showView('overview'); }
+    else document.getElementById('verifyErr').innerHTML = `<div class="err-msg">${data.message||'Verification failed'}</div>`;
+  };
+}
+
+/* ---------- TRANSFER ---------- */
+renderView_transfer();
+function renderView_transfer(){
+  document.getElementById('view-transfer').innerHTML = `
+    <div class="section-title">Send money</div>
+    <div class="panel">
+      <div id="transferErr"></div>
+      <div class="field"><label>Recipient account number</label><input id="toAcct" maxlength="10"></div>
+      <div class="recipient-box" id="recipBox">
+        <div class="avatar" id="recipAv"></div>
+        <div><b id="recipName"></b><span id="recipBank"></span></div>
+      </div>
+      <div class="field"><label>Amount</label><input id="amt" type="number" min="1" placeholder="0.00"></div>
+      <button class="btn" id="sendBtn" disabled>Send transfer</button>
+    </div>`;
+  let recipientOk=false;
+  const toAcct=document.getElementById('toAcct'), sendBtn=document.getElementById('sendBtn');
+  let debounce;
+  toAcct.addEventListener('input', ()=>{
+    clearTimeout(debounce); recipientOk=false; sendBtn.disabled=true;
+    document.getElementById('recipBox').classList.remove('show');
+    if(toAcct.value.length<10) return;
+    debounce=setTimeout(async ()=>{
+      const {ok,data} = await api('/api/accounts/name-enquiry/'+toAcct.value);
+      if(ok){
+        document.getElementById('recipAv').textContent = initials(data.accountName);
+        document.getElementById('recipName').textContent = data.accountName;
+        document.getElementById('recipBank').textContent = 'Bank code '+data.bankCode;
+        document.getElementById('recipBox').classList.add('show');
+        recipientOk=true; sendBtn.disabled=false;
+      } else {
+        document.getElementById('transferErr').innerHTML = `<div class="err-msg">${data.message||'Account not found'}</div>`;
+      }
+    },500);
+  });
+  sendBtn.onclick = async ()=>{
+    document.getElementById('transferErr').innerHTML='';
+    const amount = Number(document.getElementById('amt').value);
+    if(!recipientOk || !amount){ toast('Enter a recipient and amount','err'); return; }
+    sendBtn.disabled=true; sendBtn.textContent='Sending…';
+    const {ok,data} = await api('/api/accounts/transfer','POST',{toAccountNumber:toAcct.value, amount});
+    sendBtn.disabled=false; sendBtn.textContent='Send transfer';
+    if(ok){
+      toast('Transfer successful — '+naira(amount)+' sent');
+      toAcct.value=''; document.getElementById('amt').value='';
+      document.getElementById('recipBox').classList.remove('show');
+      recipientOk=false;
+    } else {
+      document.getElementById('transferErr').innerHTML = `<div class="err-msg">${data.message||'Transfer failed'}</div>`;
+    }
+  };
+}
+
+/* ---------- HISTORY ---------- */
+async function loadHistory(){
+  const el = document.getElementById('view-history');
+  el.innerHTML = `<div class="section-title">Transaction history</div><div class="empty">Loading…</div>`;
+  const {ok,data} = await api('/api/accounts/transactions');
+  const myAcct = state.account ? state.account.accountNumber : null;
+  if(ok && data.transactions && data.transactions.length){
+    const rows = data.transactions.map(tx=>{
+      const isOut = tx.senderAccount === myAcct;
+      return `<div class="tx-row">
+        <div class="tx-dir ${isOut?'out':'in'}">${isOut?'↑':'↓'}</div>
+        <div class="tx-mid"><b>${isOut? 'To '+tx.receiverAccount : 'From '+tx.senderAccount}</b>
+          <span>${tx.type} · ${new Date(tx.createdAt).toLocaleString()}</span></div>
+        <div class="tx-amt ${isOut?'out':'in'} mono">${isOut?'-':'+'}${naira(tx.amount)}</div>
+      </div>`;
+    }).join('');
+    el.innerHTML = `<div class="section-title">Transaction history</div><div class="panel" style="max-width:100%">${rows}</div>`;
+  } else {
+    el.innerHTML = `<div class="section-title">Transaction history</div><div class="panel" style="max-width:100%"><div class="empty">No transactions yet</div></div>`;
+  }
+}
+
+renderLogin();
+</script>
+</body>
+</html>
