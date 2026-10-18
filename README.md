@@ -61,7 +61,7 @@ NIBSS_BANK_NAME=
 - Local balances are updated only after Nibss confirms the transfer.
 
 ## Known limitation
-Transfers are not yet atomic across the Nibss call and the local database writes. A planned improvement is to use MongoDB transactions or a relational database for the ledger.
+Transfers span MongoDB and the external Nibss API, so they cannot be a single atomic transaction. Planned improvements: a PENDING/SUCCESS/FAILED transaction ledger, idempotency keys to prevent duplicate transfers on retries, and a reconciliation worker that resolves transfers with uncertain outcomes by checking their status with Nibss..
 
 ## Author
 [Faderin Daniel Ayodeji] — [www.linkedin.com/in/oluwajomiloju-faderin-222ab0386]
